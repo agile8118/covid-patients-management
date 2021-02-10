@@ -17,7 +17,7 @@ private:
     std::string firstName;
     std::string lastName;
     int age;
-    bool has_underlying_health_problems;
+    bool hasUnderlyingHealthProblems;
     Gender gender;
     Date admissionDate;
     Date dischargedDate;
@@ -25,7 +25,21 @@ private:
 
 public:
     Patient();
-    Patient(std::string ssn, std::string firstName, std::string lastName, int age, bool has_underlying_health_problems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate);
+    Patient(std::string ssn, std::string firstName, std::string lastName, int age, bool hasUnderlyingHealthProblems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate);
+
+    bool hasDischarged() const;
+    bool hasPassedAway() const;
+
+    // Getters
+    std::string getSSN() const;
+    std::string getFirstName() const;
+    std::string getLastLast() const;
+    int getAge() const;
+    bool getHasUnderlyingHealthProblems() const;
+    std::string getGender() const;
+    std::string getAdmissionDate() const;
+    std::string getDischargedDate() const;
+    std::string getDeathDate() const;
 };
 
 #endif /* Patient_hpp */
