@@ -112,8 +112,6 @@ void add_new_patience(std::vector<Patient> *patients)
     std::string hasDischargedString;
     std::string hasPassedAwayString;
 
-    std::cout << "Adding a new patient..." << std::endl;
-
     std::cout << "Enter social security number: ";
     std::cin >> ssn;
 
@@ -182,17 +180,63 @@ void add_new_patience(std::vector<Patient> *patients)
 
 int main()
 {
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "  Welcome to the COVID patients management app  " << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
+
     std::vector<Patient> patients;
 
-    add_new_patience(&patients);
-
-    for (Patient &patient : patients)
+    bool exit = false;
+    while (!exit)
     {
-        display_patient_records(patient.getSSN(), &patients);
-    }
+        int option;
+        std::string ssn;
 
-    // Date date(2020, 12, 18, 19, 59);
-    // std::cout << date.getDate() << std::endl;
+        std::cout << "Menu:" << std::endl;
+        std::cout << " [1] Add a new patient" << std::endl;
+        std::cout << " [2] Show a patient's records" << std::endl;
+        std::cout << " [3] Edit a patient's records" << std::endl;
+        std::cout << " [4] Delete a patient's records" << std::endl;
+        std::cout << " [5] Show all patients' records currently in hospitalization " << std::endl;
+        std::cout << " [6] Show all patients' records who have passed away " << std::endl;
+        std::cout << " [7] Show all patients' records who have discharged " << std::endl;
+        std::cout << " [8] Show all patients' records ordered by hospitalization duration" << std::endl;
+        std::cout << " [9] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
+        std::cout << "[10] Male to female deaths ratio" << std::endl;
+        std::cout << "[11] Exit" << std::endl;
+
+        std::cout << "Please choose an option: ";
+        if (!(std::cin >> option))
+        {
+            std::cout << std::endl;
+            std::cout << "Bad input specified. Quiting..." << std::endl;
+            std::cout << std::endl;
+            break;
+        }
+
+        switch (option)
+        {
+        case 1:
+            std::cout << "---Adding a new patient---" << std::endl;
+            add_new_patience(&patients);
+            break;
+        case 2:
+            std::cout << "---Showing a patient's records---" << std::endl;
+            std::cout << "Enter the patient's SSN: ";
+            std::cin >> ssn;
+            display_patient_records(ssn, &patients);
+            break;
+        case 11:
+            std::cout << "Exiting out of the application..." << std::endl;
+            exit = true;
+            break;
+        default:
+            std::cout << std::endl;
+            std::cout << "---No valid option was choosen. Please try again.---" << std::endl;
+            std::cout << std::endl;
+            break;
+        }
+    }
 
     return 0;
 }
