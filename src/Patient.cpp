@@ -27,6 +27,18 @@ Patient::Patient()
     this->deathDate = Date();
 }
 
+void Patient::update(std::string firstName, std::string lastName, int age, bool hasUnderlyingHealthProblems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate)
+{
+    setFirstName(firstName);
+    setLastName(lastName);
+    setAge(age);
+    setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
+    setGender(gender);
+    setAdmissionDate(admissionDate);
+    setDischargedDate(dischargedDate);
+    setDeathDate(deathDate);
+}
+
 bool Patient::hasDischarged() const
 {
     if (this->dischargedDate.hasValue())
@@ -41,6 +53,7 @@ bool Patient::hasPassedAway() const
     return false;
 }
 
+// Getters
 std::string Patient::getSSN() const
 {
     return this->ssn;
@@ -51,7 +64,7 @@ std::string Patient::getFirstName() const
     return this->firstName;
 }
 
-std::string Patient::getLastLast() const
+std::string Patient::getLastName() const
 {
     return this->lastName;
 }
@@ -91,4 +104,50 @@ std::string Patient::getDischargedDate() const
 std::string Patient::getDeathDate() const
 {
     return this->deathDate.getDate();
+}
+
+// Setters
+void Patient::setSSN(std::string ssn)
+{
+    this->ssn = ssn;
+}
+
+void Patient::setFirstName(std::string firstName)
+{
+    this->firstName = firstName;
+}
+
+void Patient::setLastName(std::string lastName)
+{
+    this->lastName = lastName;
+}
+
+void Patient::setAge(int age)
+{
+    this->age = age;
+}
+
+void Patient::setHasUnderlyingHealthProblems(bool hasUnderlyingHealthProblems)
+{
+    this->hasUnderlyingHealthProblems = hasUnderlyingHealthProblems;
+}
+
+void Patient::setGender(Gender gender)
+{
+    this->gender = gender;
+}
+
+void Patient::setAdmissionDate(Date admissionDate)
+{
+    this->admissionDate = admissionDate;
+}
+
+void Patient::setDischargedDate(Date dischargedDate)
+{
+    this->dischargedDate = dischargedDate;
+}
+
+void Patient::setDeathDate(Date deathDate)
+{
+    this->deathDate = deathDate;
 }
