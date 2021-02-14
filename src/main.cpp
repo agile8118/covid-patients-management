@@ -18,6 +18,28 @@
     - Has Underlying Health Problems
  */
 
+// int number_of_deaths(const std::vector<Patient> *patients)
+// {
+// }
+
+// int number_of_discharged_patients(const std::vector<Patient> *patients)
+// {
+// }
+
+int number_of_hospitalized_patients(const std::vector<Patient> *patients)
+{
+    int i = 0;
+    for (const Patient &patient : *patients)
+    {
+        if (!patient.hasPassedAway() && !patient.hasDischarged())
+        {
+            ++i;
+        }
+    }
+
+    return i;
+}
+
 void add_new_patience(std::vector<Patient> *patients)
 {
     std::string ssn;
@@ -99,10 +121,6 @@ void add_new_patience(std::vector<Patient> *patients)
 
 void display_patient_records(Patient patient)
 {
-
-    if (patient.getSSN() == "0000000000")
-        return;
-
     std::cout << "--------------------------------" << std::endl;
     std::cout << "Information of patient with the SSN number of " + patient.getSSN() << std::endl;
     std::cout << "First Name: " + patient.getFirstName() << std::endl;
@@ -232,23 +250,24 @@ void delete_patient_records(std::string ssn, std::vector<Patient> *patients)
     }
 }
 
-//void display_hospitalized_patiences_records() {
-//
-//}
-//
-//int number_of_deaths() {
-//
-//}
+void display_hospitalized_patients_records(const std::vector<Patient> *patients)
+{
+    std::cout << "Currently we have " + std::to_string(number_of_hospitalized_patients(patients)) + " patient(s) in hospitalization." << std::endl;
+    for (const Patient &patient : *patients)
+    {
+        if (!patient.hasPassedAway() && !patient.hasDischarged())
+        {
+            display_patient_records(patient);
+        }
+    }
+}
+
 //
 //void display_deceased_patients_records() {
 //
 //}
 //
 //void display_discharged_patients_records() {
-//
-//}
-//
-//int number_of_discharged_patients() {
 //
 //}
 //
@@ -273,13 +292,37 @@ int main()
     std::cout << "  Welcome to the COVID patients management app  " << std::endl;
     std::cout << "------------------------------------------------" << std::endl;
 
-    std::vector<Patient> patients(100);
+    std::vector<Patient> patients;
 
-    Date admissionDate(2008, 12, 21, 4, 45);
+    Date admissionDate(2019, 12, 21, 4, 45);
     Date dischargedDate;
-    Date deathDate;
-    Patient p("1234", "Joseph", "H.", 20, false, Male, admissionDate, dischargedDate, deathDate);
+    Date deathDate(2020, 2, 24, 4, 45);
+    Patient p("1234", "Patrick", "Jobs", 20, false, Male, admissionDate, dischargedDate, deathDate);
     patients.push_back(p);
+
+    Date admissionDate1(2020, 11, 18, 4, 45);
+    Date dischargedDate1(2020, 12, 21, 4, 45);
+    Date deathDate1;
+    Patient p1("652341", "Anthony", "Fiski", 32, true, Male, admissionDate1, dischargedDate1, deathDate1);
+    patients.push_back(p1);
+
+    Date admissionDate2(2020, 11, 18, 4, 45);
+    Date dischargedDate2(2020, 12, 21, 4, 45);
+    Date deathDate2;
+    Patient p2("31324", "Meredith", "Brown", 28, false, Female, admissionDate2, dischargedDate2, deathDate2);
+    patients.push_back(p2);
+
+    Date admissionDate3(2020, 7, 1, 4, 45);
+    Date dischargedDate3;
+    Date deathDate3;
+    Patient p3("621310", "Jay", "Dunphie", 56, true, Male, admissionDate3, dischargedDate3, deathDate3);
+    patients.push_back(p3);
+
+    Date admissionDate4(2021, 1, 18, 4, 45);
+    Date dischargedDate4;
+    Date deathDate4;
+    Patient p4("012314", "Alex", "Pritchet", 25, true, Female, admissionDate4, dischargedDate4, deathDate4);
+    patients.push_back(p4);
 
     bool exit = false;
     while (!exit)
@@ -292,13 +335,13 @@ int main()
         std::cout << " [2] Show a patient's records" << std::endl;
         std::cout << " [3] Edit a patient's records" << std::endl;
         std::cout << " [4] Delete a patient's records" << std::endl;
-        std::cout << " [5] Show all patient's records" << std::endl;
-        std::cout << " [6] Show all patients' records currently in hospitalization " << std::endl;
-        std::cout << " [7] Show all patients' records who have passed away " << std::endl;
-        std::cout << " [8] Show all patients' records who have discharged " << std::endl;
-        std::cout << " [9] Show all patients' records ordered by hospitalization duration" << std::endl;
-        std::cout << " [10] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
-        std::cout << "[11] Male to female deaths ratio" << std::endl;
+        std::cout << " [5] Show all patients' records currently in hospitalization " << std::endl;
+        std::cout << " [6] Show all patients' records who have passed away " << std::endl;
+        std::cout << " [7] Show all patients' records who have discharged " << std::endl;
+        std::cout << " [8] Show all patients' records ordered by hospitalization duration" << std::endl;
+        std::cout << " [9] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
+        std::cout << "[10] Male to female deaths ratio" << std::endl;
+        std::cout << "[11] Show all patient's records" << std::endl;
         std::cout << "[12] Exit" << std::endl;
 
         std::cout << "Please choose an option: ";
@@ -334,13 +377,17 @@ int main()
             std::cin >> ssn;
             edit_patient_records(ssn, &patients);
             break;
+        case 5:
+            std::cout << "---Showing all patients' records currently in hospitalization---" << std::endl;
+            display_hospitalized_patients_records(&patients);
+            break;
         case 4:
             std::cout << "---Deleteing a patient's records---" << std::endl;
             std::cout << "Enter the patient's SSN: ";
             std::cin >> ssn;
             delete_patient_records(ssn, &patients);
             break;
-        case 5:
+        case 11:
             std::cout << "---Showing all patient's records---" << std::endl;
             display_all_patients(&patients);
             break;
