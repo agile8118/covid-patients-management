@@ -79,16 +79,9 @@ bool Patient::getHasUnderlyingHealthProblems() const
     return this->hasUnderlyingHealthProblems;
 }
 
-std::string Patient::getGender() const
+Gender Patient::getGender() const
 {
-    if (this->gender == Female)
-    {
-        return "Female";
-    }
-    else
-    {
-        return "Male";
-    }
+    return this->gender;
 }
 
 std::string Patient::getAdmissionDate() const

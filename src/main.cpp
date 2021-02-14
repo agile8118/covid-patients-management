@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+
 #include "Date.h"
 #include "Patient.h"
 
@@ -151,7 +152,7 @@ void display_patient_records(Patient patient)
     std::string hasUnderlyingHealthProblems = patient.getHasUnderlyingHealthProblems() ? "Yes" : "No";
     std::cout << "Has underlying health problems: " + hasUnderlyingHealthProblems << std::endl;
 
-    std::cout << "Gender: " + patient.getGender() << std::endl;
+    std::cout << "Gender: " << (patient.getGender() == Female ? "Female" : "Male") << std::endl;
     std::cout << "Admission Date: " + patient.getAdmissionDate() << std::endl;
     if (patient.hasDischarged())
     {
@@ -209,7 +210,8 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
             hasUnderlyingHealthProblems = hasUnderlyingHealthProblemsString == "yes" ? true : false;
 
             std::cout << "New Gender "
-                      << "[" << patient.getGender() << "] (M/F): ";
+                      << "[" << (patient.getGender() == Female ? "Female" : "Male")
+                      << "] (M/F): ";
             std::cin >> genderString;
             gender = (genderString == "F" || genderString == "f") ? Female : Male;
 
@@ -325,12 +327,37 @@ void display_percentage_of_dead(int over_age, bool underlying_health_problems, c
     // Determine how many characters to remove from the percentage value
     int toErase = percentage < 10 ? 1 : (percentage == 100 ? 3 : 2);
 
+    std::cout << "--------------------------------" << std::endl;
     std::cout << std::to_string(percentage).erase(toErase) << "% of dead patients were over 70 and had underlying health problems." << std::endl;
+    std::cout << "--------------------------------" << std::endl;
 }
 
-//void men_to_women_patients_ratio() {
-//
-//}
+void display_men_to_women_patients_ratio(const std::vector<Patient> *patients)
+{
+    int menCount = 0;
+    int womenCount = 0;
+
+    for (const Patient &patient : *patients)
+    {
+        if (patient.getGender() == Female)
+        {
+            ++womenCount;
+        }
+
+        if (patient.getGender() == Male)
+        {
+            ++menCount;
+        }
+    }
+
+    float percentage = (float(menCount) / float(womenCount + menCount)) * 100;
+    int toErase = percentage < 10 ? 1 : (percentage == 100 ? 3 : 2);
+
+    std::cout << "--------------------------------" << std::endl;
+    std::cout << "Men consist " + std::to_string(percentage).erase(toErase) + "% of all the patients." << std::endl;
+    std::cout << "Male patients to women patients ratio is " << float(menCount) / float(womenCount) << std::endl;
+    std::cout << "--------------------------------" << std::endl;
+}
 
 int main()
 {
@@ -451,6 +478,9 @@ int main()
             break;
         case 9:
             display_percentage_of_dead(70, true, &patients);
+            break;
+        case 10:
+            display_men_to_women_patients_ratio(&patients);
             break;
         case 11:
             std::cout << "---Showing all patient's records---" << std::endl;

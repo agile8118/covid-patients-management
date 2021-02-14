@@ -38,7 +38,7 @@ public:
     std::string getLastName() const;
     int getAge() const;
     bool getHasUnderlyingHealthProblems() const;
-    std::string getGender() const;
+    Gender getGender() const;
     std::string getAdmissionDate() const;
     std::string getDischargedDate() const;
     std::string getDeathDate() const;
