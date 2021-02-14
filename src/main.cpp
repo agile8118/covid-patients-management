@@ -18,9 +18,19 @@
     - Has Underlying Health Problems
  */
 
-// int number_of_deaths(const std::vector<Patient> *patients)
-// {
-// }
+int number_of_deaths(const std::vector<Patient> *patients)
+{
+    int i = 0;
+    for (const Patient &patient : *patients)
+    {
+        if (patient.hasPassedAway())
+        {
+            ++i;
+        }
+    }
+
+    return i;
+}
 
 // int number_of_discharged_patients(const std::vector<Patient> *patients)
 // {
@@ -262,10 +272,18 @@ void display_hospitalized_patients_records(const std::vector<Patient> *patients)
     }
 }
 
-//
-//void display_deceased_patients_records() {
-//
-//}
+void display_deceased_patients_records(const std::vector<Patient> *patients)
+{
+    std::cout << "As of now " + std::to_string(number_of_deaths(patients)) + " patient(s) have died." << std::endl;
+    for (const Patient &patient : *patients)
+    {
+        if (patient.hasPassedAway())
+        {
+            display_patient_records(patient);
+        }
+    }
+}
+
 //
 //void display_discharged_patients_records() {
 //
@@ -377,15 +395,19 @@ int main()
             std::cin >> ssn;
             edit_patient_records(ssn, &patients);
             break;
-        case 5:
-            std::cout << "---Showing all patients' records currently in hospitalization---" << std::endl;
-            display_hospitalized_patients_records(&patients);
-            break;
         case 4:
             std::cout << "---Deleteing a patient's records---" << std::endl;
             std::cout << "Enter the patient's SSN: ";
             std::cin >> ssn;
             delete_patient_records(ssn, &patients);
+            break;
+        case 5:
+            std::cout << "---Showing all patients' records currently in hospitalization---" << std::endl;
+            display_hospitalized_patients_records(&patients);
+            break;
+        case 6:
+            std::cout << "---Showing all patients' records who have died---" << std::endl;
+            display_deceased_patients_records(&patients);
             break;
         case 11:
             std::cout << "---Showing all patient's records---" << std::endl;
