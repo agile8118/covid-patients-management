@@ -6,7 +6,8 @@ Patient::Patient(std::string ssn, std::string firstName, std::string lastName, i
     this->ssn = ssn;
     this->firstName = firstName;
     this->lastName = lastName;
-    this->age = age;
+    if (checkAge(age))
+        this->age = age;
     this->hasUnderlyingHealthProblems = hasUnderlyingHealthProblems;
     this->gender = gender;
     this->admissionDate = admissionDate;
@@ -66,6 +67,18 @@ int Patient::hospitalizationDuration(Date currentDate) const
     else
     {
         return currentDate - this->getAdmissionDate();
+    }
+}
+
+bool Patient::checkAge(int age) const
+{
+    if (age > 0 && age < 200)
+    {
+        return true;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid age. Age must be between 1-200, received '" + std::to_string(age) + "'");
     }
 }
 
@@ -135,7 +148,7 @@ void Patient::setLastName(std::string lastName)
 
 void Patient::setAge(int age)
 {
-    if (age > 0 && age < 200)
+    if (checkAge(age))
         this->age = age;
 }
 
@@ -152,15 +165,23 @@ void Patient::setGender(Gender gender)
 void Patient::setAdmissionDate(Date admissionDate)
 {
     if (admissionDate.hasValue())
+    {
         this->admissionDate = admissionDate;
+    }
 }
 
 void Patient::setDischargedDate(Date dischargedDate)
 {
+    if (dischargedDate.hasValue() && dischargedDate < admissionDate)
+        throw std::invalid_argument("Invalid discharged date. Discharged date must be older than the admission date. Received '" + dischargedDate.getDate() + "'");
+
     this->dischargedDate = dischargedDate;
 }
 
 void Patient::setDeathDate(Date deathDate)
 {
+    if (dischargedDate.hasValue() && deathDate < admissionDate)
+        throw std::invalid_argument("Invalid death date. Death date must be older than the admission date. Received '" + deathDate.getDate() + "'");
+
     this->deathDate = deathDate;
 }

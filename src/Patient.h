@@ -23,6 +23,9 @@ private:
     Date dischargedDate;
     Date deathDate;
 
+    // Validators
+    bool checkAge(int age) const;
+
 public:
     Patient();
     Patient(std::string ssn, std::string firstName, std::string lastName, int age, bool hasUnderlyingHealthProblems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate);

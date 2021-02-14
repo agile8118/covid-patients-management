@@ -59,11 +59,20 @@ std::string Date::getFormattedHour(int h) const
 
 Date::Date(int y, int m, int d, int h, int min)
 {
-    year = y;
-    month = m;
-    day = d;
-    hour = h;
-    minute = min;
+    if (checkYear(y))
+        year = y;
+
+    if (checkMonth(m))
+        month = m;
+
+    if (checkDay(d))
+        day = d;
+
+    if (checkHour(h))
+        hour = h;
+
+    if (checkMinute(min))
+        minute = min;
 }
 
 Date::Date()
@@ -94,16 +103,25 @@ void Date::insert(std::string dateString)
 
     linestream >> year >> month >> day >> hour >> min;
 
-    this->year = std::stoi(year);
-    this->month = std::stoi(month);
-    this->day = std::stoi(day);
+    if (checkYear(std::stoi(year)))
+        this->year = std::stoi(year);
+    if (checkMonth(std::stoi(month)))
+        this->month = std::stoi(month);
+    if (checkDay(std::stoi(day)))
+        this->day = std::stoi(day);
 
     if (hour.length() > 0)
-        this->hour = std::stoi(hour);
+    {
+        if (checkHour(std::stoi(hour)))
+            this->hour = std::stoi(hour);
+    }
     else
         this->hour = 0;
     if (min.length() > 0)
-        this->minute = std::stoi(min);
+    {
+        if (checkMonth(std::stoi(min)))
+            this->minute = std::stoi(min);
+    }
     else
         this->minute = 0;
 }
@@ -113,6 +131,47 @@ bool Date::hasValue() const
     if (this->year == 0)
         return false;
     return true;
+}
+
+// Validators
+bool Date::checkYear(int y) const
+{
+    if (y > 1970 && y < 2050)
+        return true;
+    else
+        throw std::invalid_argument("Invalid year. Year must be between 1970-2050, received '" + std::to_string(y) + "'");
+}
+
+bool Date::checkMonth(int m) const
+{
+    if (m > 0 && m <= 12)
+        return true;
+    else
+        throw std::invalid_argument("Invalid month. Month must be between 1-12, received '" + std::to_string(m) + "'");
+}
+
+bool Date::checkDay(int d) const
+{
+    if (d > 0 && d <= 31)
+        return true;
+    else
+        throw std::invalid_argument("Invalid day. Day must be between 1-31, received '" + std::to_string(d) + "'");
+}
+
+bool Date::checkHour(int h) const
+{
+    if (h > 0 && h <= 24)
+        return true;
+    else
+        throw std::invalid_argument("Invalid hour. Hour must be between 1-24, received '" + std::to_string(h) + "'");
+}
+
+bool Date::checkMinute(int m) const
+{
+    if (m > 0 && m <= 60)
+        return true;
+    else
+        throw std::invalid_argument("Invalid minute. Minute must be between 1-60, received '" + std::to_string(m) + "'");
 }
 
 bool Date::operator<(const Date &other) const
@@ -182,6 +241,7 @@ bool Date::operator>(const Date &other) const
         return true;
 }
 
+// Calculate how many days is the difference between 2 days (expects all months to be 30 days)
 int Date::operator-(const Date &other) const
 {
     Date greaterDate = (*this > other) ? *this : other;

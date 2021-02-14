@@ -16,6 +16,13 @@ private:
     std::string getFormattedMin(int m) const;
     std::string getFormattedHour(int h) const;
 
+    // Validators
+    bool checkYear(int y) const;
+    bool checkMonth(int m) const;
+    bool checkDay(int d) const;
+    bool checkHour(int h) const;
+    bool checkMinute(int m) const;
+
 public:
     Date();
     Date(int y, int m, int d, int h, int min);

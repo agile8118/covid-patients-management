@@ -66,6 +66,7 @@ void add_new_patience(std::vector<Patient> *patients)
     Date deathDate;
 
     // These values will be used to store whatever user specifies in the terminal
+    std::string ageString;
     std::string hasUnderlyingHealthProblemsString;
     std::string genderString;
     std::string admissionDateString;
@@ -73,64 +74,100 @@ void add_new_patience(std::vector<Patient> *patients)
     std::string deathDateString;
     std::string hasDischargedString;
     std::string hasPassedAwayString;
-
-    // SSN
-    std::cout << "Enter social security number: ";
-    std::cin >> ssn;
-
-    // First name
-    std::cout << "Enter first name: ";
-    std::cin >> firstName;
-
-    // Last name
-    std::cout << "Enter last name: ";
-    std::cin >> lastName;
-
-    // Age
-    std::cout << "Enter age: ";
-    std::cin >> age;
-
-    // Underlying health problems
-    std::cout << "Does the patient have underlying health problems? (yes/no): ";
-    std::cin >> hasUnderlyingHealthProblemsString;
-    hasUnderlyingHealthProblems = hasUnderlyingHealthProblemsString == "yes" ? true : false;
-
-    // Gender
-    std::cout << "Enter Gender (F/M): ";
-    std::cin >> genderString;
-    gender = (genderString == "F" || genderString == "f") ? Female : Male;
-
-    // Admission date
-    std::cout << "Enter admission date (year, month, day, hour, minute): ";
-    std::cin.ignore();
-    getline(std::cin, admissionDateString);
-    admissionDate.insert(admissionDateString);
-
-    // Discharged date
-    std::cout << "Has the patient discharged? (yes/no): ";
-    std::cin >> hasDischargedString;
-    if (hasDischargedString == "yes" || hasDischargedString == "y")
+    try
     {
-        std::cout << "Enter discharged date (year, month, day, hour, minute): ";
-        std::cin.ignore();
-        getline(std::cin, dischargedDateString);
-        dischargedDate.insert(dischargedDateString);
-    }
+        Patient p;
 
-    // Death date
-    std::cout << "Has the patient passed away? (yes/no): ";
-    std::cin >> hasPassedAwayString;
-    if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
+        // SSN
+        std::cout << "Enter social security number: ";
+        std::cin >> ssn;
+        p.setSSN(ssn);
+
+        // First name
+        std::cout << "Enter first name: ";
+        std::cin >> firstName;
+        p.setFirstName(firstName);
+
+        // Last name
+        std::cout << "Enter last name: ";
+        std::cin >> lastName;
+        p.setLastName(lastName);
+
+        // Age
+        std::cout << "Enter age: ";
+        std::cin.ignore();
+        getline(std::cin, ageString);
+        std::stringstream ageStr(ageString);
+        if (!(ageStr >> age))
+            throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'");
+        p.setAge(age);
+
+        // Underlying health problems
+        std::cout << "Does the patient have underlying health problems? (yes/no): ";
+        std::cin >> hasUnderlyingHealthProblemsString;
+        p.setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
+        if (hasUnderlyingHealthProblemsString == "yes" || hasUnderlyingHealthProblemsString == "y")
+            hasUnderlyingHealthProblems = true;
+        else if (hasUnderlyingHealthProblemsString == "no" || hasUnderlyingHealthProblemsString == "n")
+            hasUnderlyingHealthProblems = false;
+        else
+            throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'");
+
+        // Gender
+        std::cout << "Enter Gender (F/M): ";
+        std::cin >> genderString;
+        if (genderString == "F" || genderString == "f")
+            gender = Female;
+        else if (genderString == "m" || genderString == "M")
+            gender = Male;
+        else
+            throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'");
+        p.setGender(gender);
+
+        // Admission date
+        std::cout << "Enter admission date (year, month, day, hour, minute): ";
+        std::cin.ignore();
+        getline(std::cin, admissionDateString);
+        admissionDate.insert(admissionDateString);
+        p.setAdmissionDate(admissionDate);
+
+        // Discharged date
+        std::cout << "Has the patient discharged? (yes/no): ";
+        std::cin >> hasDischargedString;
+        if (hasDischargedString == "yes" || hasDischargedString == "y")
+        {
+            std::cout << "Enter discharged date (year, month, day, hour, minute): ";
+            std::cin.ignore();
+            getline(std::cin, dischargedDateString);
+            dischargedDate.insert(dischargedDateString);
+            p.setDischargedDate(dischargedDate);
+        }
+
+        // Death date
+        if (!p.hasDischarged())
+        {
+            std::cout << "Has the patient passed away? (yes/no): ";
+            std::cin >> hasPassedAwayString;
+            if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
+            {
+                std::cout << "Enter death date (year, month, day, hour, minute): ";
+                std::cin.ignore();
+                getline(std::cin, deathDateString);
+                deathDate.insert(deathDateString);
+                p.setDeathDate(deathDate);
+            }
+        }
+
+        patients->push_back(p);
+        std::cout << "---The patient was added successfully.---" << std::endl;
+    }
+    catch (const std::invalid_argument &e)
     {
-        std::cout << "Enter death date (year, month, day, hour, minute): ";
-        std::cin.ignore();
-        getline(std::cin, deathDateString);
-        deathDate.insert(deathDateString);
+        std::cout << "***************************************" << std::endl;
+        std::cout << "Received invalid arguments, please try again." << std::endl;
+        std::cout << e.what() << std::endl;
+        std::cout << "***************************************" << std::endl;
     }
-
-    Patient p(ssn, firstName, lastName, age, hasUnderlyingHealthProblems, gender, admissionDate, dischargedDate, deathDate);
-
-    patients->push_back(p);
 }
 
 void display_patient_records(Patient patient, std::string hospitalizationDuration = "")
