@@ -39,9 +39,9 @@ public:
     int getAge() const;
     bool getHasUnderlyingHealthProblems() const;
     Gender getGender() const;
-    std::string getAdmissionDate() const;
-    std::string getDischargedDate() const;
-    std::string getDeathDate() const;
+    Date getAdmissionDate() const;
+    Date getDischargedDate() const;
+    Date getDeathDate() const;
 
     // Setters
     void setSSN(std::string ssn);

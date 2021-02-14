@@ -22,6 +22,8 @@ public:
     void insert(std::string dateString);
     std::string getDate() const;
     bool hasValue() const;
+
+    bool operator<(const Date &other) const;
 };
 
 #endif /* Date_h */

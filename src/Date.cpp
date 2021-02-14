@@ -107,3 +107,62 @@ bool Date::hasValue() const
         return false;
     return true;
 }
+
+bool Date::operator<(const Date &other) const
+{
+    if (year < other.year)
+    {
+        return true;
+    }
+    else if (year > other.year)
+    {
+        return false;
+    }
+    else if (year == other.year)
+    {
+        if (month < other.month)
+        {
+            return true;
+        }
+        else if (month > other.month)
+        {
+            return false;
+        }
+        else if (month == other.month)
+        {
+            if (day < other.day)
+            {
+                return true;
+            }
+            else if (day > other.day)
+            {
+                return false;
+            }
+            else if (day == other.day)
+            {
+                if (hour < other.hour)
+                {
+                    return true;
+                }
+                else if (hour > other.hour)
+                {
+                    return false;
+                }
+                else if (hour == other.hour)
+                {
+                    if (minute < other.minute)
+                    {
+                        return true;
+                    }
+                    else if (minute > other.minute)
+                    {
+                        return false;
+                    }
+                    else if (minute == other.minute)
+                        return false;
+                }
+            }
+        }
+    }
+    return false;
+}

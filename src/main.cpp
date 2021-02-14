@@ -153,15 +153,15 @@ void display_patient_records(Patient patient)
     std::cout << "Has underlying health problems: " + hasUnderlyingHealthProblems << std::endl;
 
     std::cout << "Gender: " << (patient.getGender() == Female ? "Female" : "Male") << std::endl;
-    std::cout << "Admission Date: " + patient.getAdmissionDate() << std::endl;
+    std::cout << "Admission Date: " + patient.getAdmissionDate().getDate() << std::endl;
     if (patient.hasDischarged())
     {
-        std::cout << "Discharged Date: " + patient.getDischargedDate() << std::endl;
+        std::cout << "Discharged Date: " + patient.getDischargedDate().getDate() << std::endl;
     }
 
     if (patient.hasPassedAway())
     {
-        std::cout << "Death Date: " + patient.getDeathDate() << std::endl;
+        std::cout << "Death Date: " + patient.getDeathDate().getDate() << std::endl;
     }
     std::cout << "--------------------------------" << std::endl;
 }
@@ -216,13 +216,13 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
             gender = (genderString == "F" || genderString == "f") ? Female : Male;
 
             std::cout << "New admission date "
-                      << "[" << patient.getAdmissionDate() << "] (year, month, day, hour, minute): ";
+                      << "[" << patient.getAdmissionDate().getDate() << "] (year, month, day, hour, minute): ";
             std::cin.ignore();
             getline(std::cin, admissionDateString);
             if (admissionDateString.length() > 0)
                 admissionDate.insert(admissionDateString);
 
-            std::cout << "Has the patient discharged [" << (patient.hasDischarged() ? ("Current discharged date is: " + patient.getDischargedDate()) : "no")
+            std::cout << "Has the patient discharged [" << (patient.hasDischarged() ? ("Current discharged date is: " + patient.getDischargedDate().getDate()) : "no")
                       << "] (yes/no): ";
 
             std::cin >> hasDischargedString;
@@ -234,7 +234,7 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
                 dischargedDate.insert(dischargedDateString);
             }
 
-            std::cout << "Has the patient passed away [" << (patient.hasPassedAway() ? ("Current death date is: " + patient.getDeathDate()) : "no")
+            std::cout << "Has the patient passed away [" << (patient.hasPassedAway() ? ("Current death date is: " + patient.getDeathDate().getDate()) : "no")
                       << "] (yes/no): ";
 
             std::cin >> hasPassedAwayString;
@@ -248,14 +248,6 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
 
             patient.update(firstName, lastName, age, hasUnderlyingHealthProblems, gender, admissionDate, dischargedDate, deathDate);
         }
-    }
-}
-
-void display_all_patients(const std::vector<Patient> *patients)
-{
-    for (const Patient &patient : *patients)
-    {
-        display_patient_records(patient);
     }
 }
 
@@ -309,9 +301,18 @@ void display_discharged_patients_records(const std::vector<Patient> *patients)
     }
 }
 
-//void display_patients_by_hospitalization_date() {
-//
-//}
+void display_all_patients(std::vector<Patient> *patients)
+{
+    // Sort the records first by the admission date
+    std::sort(patients->begin(), patients->end(), [](const Patient &lhs, const Patient &rhs) {
+        return lhs.getAdmissionDate() < rhs.getAdmissionDate();
+    });
+
+    for (const Patient &patient : *patients)
+    {
+        display_patient_records(patient);
+    }
+}
 
 void display_percentage_of_dead(int over_age, bool underlying_health_problems, const std::vector<Patient> *patients)
 {
@@ -367,41 +368,14 @@ int main()
 
     std::vector<Patient> patients;
 
-    Date admissionDate(2019, 12, 21, 4, 45);
-    Date dischargedDate;
-    Date deathDate(2020, 2, 24, 4, 45);
-    Patient p("1234", "Patrick", "Jobs", 100, true, Male, admissionDate, dischargedDate, deathDate);
-    patients.push_back(p);
-
-    Date admissionDate1(2020, 11, 18, 4, 45);
-    Date dischargedDate1(2020, 12, 21, 4, 45);
-    Date deathDate1;
-    Patient p1("652341", "Anthony", "Fiski", 89, true, Male, admissionDate1, dischargedDate1, deathDate1);
-    patients.push_back(p1);
-
-    Date admissionDate2(2020, 11, 18, 4, 45);
-    Date dischargedDate2(2020, 12, 21, 4, 45);
-    Date deathDate2;
-    Patient p2("31324", "Meredith", "Brown", 28, false, Female, admissionDate2, dischargedDate2, deathDate2);
-    patients.push_back(p2);
-
-    Date admissionDate3(2020, 7, 1, 4, 45);
-    Date dischargedDate3;
-    Date deathDate3;
-    Patient p3("621310", "Jay", "Dunphie", 56, true, Male, admissionDate3, dischargedDate3, deathDate3);
-    patients.push_back(p3);
-
-    Date admissionDate4(2021, 1, 18, 4, 45);
-    Date dischargedDate4;
-    Date deathDate4;
-    Patient p4("012314", "Alex", "Pritchet", 25, true, Female, admissionDate4, dischargedDate4, deathDate4);
-    patients.push_back(p4);
-
-    Date admissionDate5(2019, 4, 12, 1, 50);
-    Date dischargedDate5;
-    Date deathDate5(2019, 4, 19, 12, 1);
-    Patient p5("3481946", "Luke", "Heimert", 72, true, Male, admissionDate5, dischargedDate5, deathDate5);
-    patients.push_back(p5);
+    // Inserting some seed data
+    patients.push_back(Patient("67538654", "Patrick", "Davis", 71, true, Male, Date(2020, 12, 21, 4, 45), Date(), Date(2020, 2, 24, 4, 45)));
+    patients.push_back(Patient("87623654", "Anthony", "Johnson", 89, true, Male, Date(2020, 12, 18, 4, 45), Date(2020, 12, 21, 4, 45), Date()));
+    patients.push_back(Patient("24587905", "Meredith", "Brown", 28, false, Female, Date(2020, 12, 12, 4, 45), Date(2020, 12, 21, 4, 45), Date()));
+    patients.push_back(Patient("67535763", "Jay", "Dunphie", 56, true, Male, Date(2020, 12, 1, 4, 45), Date(), Date()));
+    patients.push_back(Patient("13498376", "Alex", "Smith", 25, true, Female, Date(2020, 12, 18, 5, 45), Date(), Date()));
+    patients.push_back(Patient("13465209", "Luke", "Heimert", 72, true, Male, Date(2020, 12, 17, 1, 50), Date(), Date(2019, 4, 19, 12, 1)));
+    patients.push_back(Patient("42719475", "Emma", "Miller", 23, false, Female, Date(2020, 1, 9, 1, 50), Date(2019, 6, 11, 7, 40), Date()));
 
     bool exit = false;
     while (!exit)
@@ -417,13 +391,10 @@ int main()
         std::cout << " [5] Show all patients' records currently in hospitalization " << std::endl;
         std::cout << " [6] Show all patients' records who have passed away " << std::endl;
         std::cout << " [7] Show all patients' records who have discharged " << std::endl;
-
-        std::cout << " [8] Show all patients' records ordered by hospitalization duration" << std::endl;
+        std::cout << " [8] Show all patients' records (sorted by admission date)" << std::endl;
         std::cout << " [9] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
         std::cout << "[10] Male to female deaths ratio" << std::endl;
-
-        std::cout << "[11] Show all patient's records" << std::endl;
-        std::cout << "[12] Exit" << std::endl;
+        std::cout << "[11] Exit" << std::endl;
 
         std::cout << "Please choose an option: ";
         if (!(std::cin >> option))
@@ -476,6 +447,10 @@ int main()
             std::cout << "---Showing all patients' records who have discharged---" << std::endl;
             display_discharged_patients_records(&patients);
             break;
+        case 8:
+            std::cout << "---Showing all patients' records (sorted by admission date) ---" << std::endl;
+            display_all_patients(&patients);
+            break;
         case 9:
             display_percentage_of_dead(70, true, &patients);
             break;
@@ -483,10 +458,6 @@ int main()
             display_men_to_women_patients_ratio(&patients);
             break;
         case 11:
-            std::cout << "---Showing all patient's records---" << std::endl;
-            display_all_patients(&patients);
-            break;
-        case 12:
             std::cout << "Exiting out of the application..." << std::endl;
             exit = true;
             break;

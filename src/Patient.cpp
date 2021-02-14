@@ -84,19 +84,19 @@ Gender Patient::getGender() const
     return this->gender;
 }
 
-std::string Patient::getAdmissionDate() const
+Date Patient::getAdmissionDate() const
 {
-    return this->admissionDate.getDate();
+    return this->admissionDate;
 }
 
-std::string Patient::getDischargedDate() const
+Date Patient::getDischargedDate() const
 {
-    return this->dischargedDate.getDate();
+    return this->dischargedDate;
 }
 
-std::string Patient::getDeathDate() const
+Date Patient::getDeathDate() const
 {
-    return this->deathDate.getDate();
+    return this->deathDate;
 }
 
 // Setters
