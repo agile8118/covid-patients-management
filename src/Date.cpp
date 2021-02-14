@@ -92,6 +92,10 @@ std::string Date::getDate() const
 // Convert a date string to a Date object
 void Date::insert(std::string dateString)
 {
+
+    if (!regex_match(dateString, std::regex("(\\d)+(\\W)+\\ ?(\\d)+(\\W)+\\ ?(\\d)+(\\W)+\\ ?(\\d)+(\\W)+\\ ?(\\d)+")))
+        throw std::invalid_argument("Invalid date. Make sure to specify the date in the proper format (year, month, day, hour, minute). Received '" + dateString + "'.");
+
     std::string year;
     std::string month;
     std::string day;
@@ -99,6 +103,10 @@ void Date::insert(std::string dateString)
     std::string min;
 
     std::replace(dateString.begin(), dateString.end(), ',', ' ');
+    std::replace(dateString.begin(), dateString.end(), '.', ' ');
+    std::replace(dateString.begin(), dateString.end(), '-', ' ');
+    std::replace(dateString.begin(), dateString.end(), '_', ' ');
+    std::replace(dateString.begin(), dateString.end(), ':', ' ');
     std::istringstream linestream(dateString);
 
     linestream >> year >> month >> day >> hour >> min;
@@ -109,21 +117,10 @@ void Date::insert(std::string dateString)
         this->month = std::stoi(month);
     if (checkDay(std::stoi(day)))
         this->day = std::stoi(day);
-
-    if (hour.length() > 0)
-    {
-        if (checkHour(std::stoi(hour)))
-            this->hour = std::stoi(hour);
-    }
-    else
-        this->hour = 0;
-    if (min.length() > 0)
-    {
-        if (checkMonth(std::stoi(min)))
-            this->minute = std::stoi(min);
-    }
-    else
-        this->minute = 0;
+    if (checkHour(std::stoi(hour)))
+        this->hour = std::stoi(hour);
+    if (checkMinute(std::stoi(min)))
+        this->minute = std::stoi(min);
 }
 
 bool Date::hasValue() const
@@ -141,7 +138,7 @@ bool Date::checkYear(int y) const
     if (y > 1970 && y < 2050)
         return true;
     else
-        throw std::invalid_argument("Invalid year. Year must be between 1970-2050, received '" + std::to_string(y) + "'");
+        throw std::invalid_argument("Invalid year. Year must be between 1970-2050, received '" + std::to_string(y) + "'.");
 }
 
 bool Date::checkMonth(int m) const
@@ -149,7 +146,7 @@ bool Date::checkMonth(int m) const
     if (m > 0 && m <= 12)
         return true;
     else
-        throw std::invalid_argument("Invalid month. Month must be between 1-12, received '" + std::to_string(m) + "'");
+        throw std::invalid_argument("Invalid month. Month must be between 1-12, received '" + std::to_string(m) + "'.");
 }
 
 bool Date::checkDay(int d) const
@@ -157,23 +154,23 @@ bool Date::checkDay(int d) const
     if (d > 0 && d <= 31)
         return true;
     else
-        throw std::invalid_argument("Invalid day. Day must be between 1-31, received '" + std::to_string(d) + "'");
+        throw std::invalid_argument("Invalid day. Day must be between 1-31, received '" + std::to_string(d) + "'.");
 }
 
 bool Date::checkHour(int h) const
 {
-    if (h > 0 && h <= 24)
+    if (h >= 0 && h <= 24)
         return true;
     else
-        throw std::invalid_argument("Invalid hour. Hour must be between 1-24, received '" + std::to_string(h) + "'");
+        throw std::invalid_argument("Invalid hour. Hour must be between 1-24, received '" + std::to_string(h) + "'.");
 }
 
 bool Date::checkMinute(int m) const
 {
-    if (m > 0 && m <= 60)
+    if (m >= 0 && m <= 60)
         return true;
     else
-        throw std::invalid_argument("Invalid minute. Minute must be between 1-60, received '" + std::to_string(m) + "'");
+        throw std::invalid_argument("Invalid minute. Minute must be between 1-60, received '" + std::to_string(m) + "'.");
 }
 
 bool Date::operator<(const Date &other) const

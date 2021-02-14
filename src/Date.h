@@ -2,6 +2,7 @@
 #define Date_h
 #include <iostream>
 #include <sstream>
+#include <regex>
 
 class Date
 {

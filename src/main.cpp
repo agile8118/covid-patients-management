@@ -116,7 +116,7 @@ void add_new_patience(std::vector<Patient> *patients)
         getline(std::cin, ageString);
         std::stringstream ageStr(ageString);
         if (!(ageStr >> age))
-            throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'");
+            throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'.");
         p.setAge(age);
 
         // Underlying health problems
@@ -127,7 +127,7 @@ void add_new_patience(std::vector<Patient> *patients)
         else if (hasUnderlyingHealthProblemsString == "no" || hasUnderlyingHealthProblemsString == "n")
             hasUnderlyingHealthProblems = false;
         else
-            throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'");
+            throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'.");
         p.setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
 
         // Gender
@@ -138,7 +138,7 @@ void add_new_patience(std::vector<Patient> *patients)
         else if (genderString == "m" || genderString == "M")
             gender = Male;
         else
-            throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'");
+            throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'.");
         p.setGender(gender);
 
         // Admission date
@@ -271,7 +271,7 @@ void edit_patient_records(Patient *patient)
         {
             std::stringstream ageStr(ageString);
             if (!(ageStr >> age))
-                throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'");
+                throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'.");
             patient->setAge(age);
         }
 
@@ -286,7 +286,7 @@ void edit_patient_records(Patient *patient)
             else if (hasUnderlyingHealthProblemsString == "no" || hasUnderlyingHealthProblemsString == "n")
                 hasUnderlyingHealthProblems = false;
             else
-                throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'");
+                throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'.");
             patient->setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
         }
 
@@ -302,7 +302,7 @@ void edit_patient_records(Patient *patient)
             else if (genderString == "m" || genderString == "M")
                 gender = Male;
             else
-                throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'");
+                throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'.");
             patient->setGender(gender);
         }
 
@@ -434,7 +434,7 @@ void display_all_patients_with_hospitalizaition_duration(std::vector<Patient> *p
     getline(std::cin, currectDate);
     try
     {
-        currentDate.insert(currectDate);
+        currentDate.insert(currectDate + ", 0, 0");
         // Sort the records first by the admission date
         std::sort(patients->begin(), patients->end(), [&currentDate](const Patient &lhs, const Patient &rhs) {
             return lhs.hospitalizationDuration(currentDate) < rhs.hospitalizationDuration(currentDate);
