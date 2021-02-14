@@ -164,7 +164,7 @@ void add_new_patience(std::vector<Patient> *patients)
     catch (const std::invalid_argument &e)
     {
         std::cout << "***************************************" << std::endl;
-        std::cout << "Received invalid arguments, please try again." << std::endl;
+        std::cout << "Received invalid argument, please try again." << std::endl;
         std::cout << e.what() << std::endl;
         std::cout << "***************************************" << std::endl;
     }
@@ -228,86 +228,116 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
 
             std::cout << "(For each field either specify a new info or hit enter to skip.)" << std::endl;
 
-            // First name
-            std::cout << "New first name "
-                      << "[" << patient.getFirstName() << "]: ";
-            std::cin.ignore();
-            getline(std::cin, firstName);
-
-            // Last name
-            std::cout << "New last name "
-                      << "[" << patient.getLastName() << "]: ";
-            getline(std::cin, lastName);
-
-            // Age
-            std::cout << "New age "
-                      << "[" << std::to_string(patient.getAge()) << "]: ";
-            getline(std::cin, ageString);
-            std::stringstream ageStr(ageString);
-            ageStr >> age;
-
-            // Underlying health problems
-            std::cout << "Underlying health problems [" << (patient.getHasUnderlyingHealthProblems() ? "yes" : "no")
-                      << "] (yes/no): ";
-            getline(std::cin, hasUnderlyingHealthProblemsString);
-            if (hasUnderlyingHealthProblemsString.length() > 0)
-                hasUnderlyingHealthProblems = hasUnderlyingHealthProblemsString == "yes" ? true : false;
-            else
-                hasUnderlyingHealthProblems = patient.getHasUnderlyingHealthProblems();
-
-            // Gender
-            std::cout << "New Gender "
-                      << "[" << (patient.getGender() == Female ? "Female" : "Male")
-                      << "] (M/F): ";
-            getline(std::cin, genderString);
-            if (genderString.length() > 0)
-                gender = (genderString == "F" || genderString == "f") ? Female : Male;
-            else
-                gender = patient.getGender();
-
-            // Admission date
-            std::cout << "New admission date "
-                      << "[" << patient.getAdmissionDate().getDate() << "] (year, month, day, hour, minute): ";
-            getline(std::cin, admissionDateString);
-            if (admissionDateString.length() > 0)
-                admissionDate.insert(admissionDateString);
-
-            // Discharged date
-            std::cout << "Has the patient discharged [" << (patient.hasDischarged() ? ("Current discharged date is: " + patient.getDischargedDate().getDate()) : "no")
-                      << "] (yes/no): ";
-            getline(std::cin, hasDischargedString);
-            if (hasDischargedString.length() > 0)
+            try
             {
-                if (hasDischargedString == "yes" || hasDischargedString == "y")
-                {
-                    std::cout << "Enter discharged date (year, month, day, hour, minute): ";
-                    std::cin.ignore();
-                    getline(std::cin, dischargedDateString);
-                    dischargedDate.insert(dischargedDateString);
-                }
-            }
-            else
-                dischargedDate = patient.getDischargedDate();
+                // First name
+                std::cout << "New first name "
+                          << "[" << patient.getFirstName() << "]: ";
+                std::cin.ignore();
+                getline(std::cin, firstName);
+                if (firstName.length() > 0)
+                    patient.setFirstName(firstName);
 
-            // Death date
-            std::cout << "Has the patient passed away [" << (patient.hasPassedAway() ? ("Current death date is: " + patient.getDeathDate().getDate()) : "no")
-                      << "] (yes/no): ";
-            getline(std::cin, hasPassedAwayString);
-            if (hasPassedAwayString.length() > 0)
+                // Last name
+                std::cout << "New last name "
+                          << "[" << patient.getLastName() << "]: ";
+                getline(std::cin, lastName);
+                if (lastName.length() > 0)
+                    patient.setLastName(lastName);
+
+                // Age
+                std::cout << "New age "
+                          << "[" << std::to_string(patient.getAge()) << "]: ";
+                getline(std::cin, ageString);
+                if (ageString.length() > 0)
+                {
+                    std::stringstream ageStr(ageString);
+                    if (!(ageStr >> age))
+                        throw std::invalid_argument("Invalid age. Make sure to specify the age correctly. Received '" + ageString + "'");
+                    patient.setAge(age);
+                }
+
+                // Underlying health problems
+                std::cout << "Underlying health problems [" << (patient.getHasUnderlyingHealthProblems() ? "yes" : "no")
+                          << "] (yes/no): ";
+                getline(std::cin, hasUnderlyingHealthProblemsString);
+                if (hasUnderlyingHealthProblemsString.length() > 0)
+                {
+                    if (hasUnderlyingHealthProblemsString == "yes" || hasUnderlyingHealthProblemsString == "y")
+                        hasUnderlyingHealthProblems = true;
+                    else if (hasUnderlyingHealthProblemsString == "no" || hasUnderlyingHealthProblemsString == "n")
+                        hasUnderlyingHealthProblems = false;
+                    else
+                        throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'");
+                    patient.setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
+                }
+
+                // Gender
+                std::cout << "New Gender "
+                          << "[" << (patient.getGender() == Female ? "Female" : "Male")
+                          << "] (M/F): ";
+                getline(std::cin, genderString);
+                if (genderString.length() > 0)
+                {
+                    if (genderString == "F" || genderString == "f")
+                        gender = Female;
+                    else if (genderString == "m" || genderString == "M")
+                        gender = Male;
+                    else
+                        throw std::invalid_argument("Invalid gender. Make sure to specify the gender correctly (M/F). Received '" + genderString + "'");
+                    patient.setGender(gender);
+                }
+
+                // Admission date
+                std::cout << "New admission date "
+                          << "[" << patient.getAdmissionDate().getDate() << "] (year, month, day, hour, minute): ";
+                getline(std::cin, admissionDateString);
+                if (admissionDateString.length() > 0)
+                {
+                    admissionDate.insert(admissionDateString);
+                    patient.setAdmissionDate(admissionDate);
+                }
+
+                // Discharged date
+                std::cout << "Has the patient discharged [" << (patient.hasDischarged() ? ("Current discharged date is: " + patient.getDischargedDate().getDate()) : "no")
+                          << "] (yes/no): ";
+                getline(std::cin, hasDischargedString);
+                if (hasDischargedString.length() > 0)
+                {
+                    if (hasDischargedString == "yes" || hasDischargedString == "y")
+                    {
+                        std::cout << "Enter discharged date (year, month, day, hour, minute): ";
+                        std::cin.ignore();
+                        getline(std::cin, dischargedDateString);
+                        dischargedDate.insert(dischargedDateString);
+                    }
+                    patient.setAdmissionDate(dischargedDate);
+                }
+
+                // Death date
+                std::cout << "Has the patient passed away [" << (patient.hasPassedAway() ? ("Current death date is: " + patient.getDeathDate().getDate()) : "no")
+                          << "] (yes/no): ";
+                getline(std::cin, hasPassedAwayString);
+                if (hasPassedAwayString.length() > 0)
+                {
+                    if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
+                    {
+                        std::cout << "Enter death date (year, month, day, hour, minute): ";
+                        getline(std::cin, deathDateString);
+                        deathDate.insert(deathDateString);
+                    }
+                    patient.setDeathDate(deathDate);
+                }
+
+                std::cout << "---Patient's records updated successfully.---" << std::endl;
+            }
+            catch (const std::invalid_argument &e)
             {
-                if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
-                {
-                    std::cout << "Enter death date (year, month, day, hour, minute): ";
-                    getline(std::cin, deathDateString);
-                    deathDate.insert(deathDateString);
-                }
+                std::cout << "***************************************" << std::endl;
+                std::cout << "Received invalid argument, please try again." << std::endl;
+                std::cout << e.what() << std::endl;
+                std::cout << "***************************************" << std::endl;
             }
-            else
-                deathDate = patient.getDeathDate();
-
-            patient.update(firstName, lastName, age, hasUnderlyingHealthProblems, gender, admissionDate, dischargedDate, deathDate);
-
-            std::cout << "---Patient's records updated successfully.---" << std::endl;
         }
     }
 }

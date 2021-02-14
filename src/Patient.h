@@ -30,8 +30,6 @@ public:
     Patient();
     Patient(std::string ssn, std::string firstName, std::string lastName, int age, bool hasUnderlyingHealthProblems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate);
 
-    void update(std::string firstName, std::string lastName, int age, bool hasUnderlyingHealthProblems, Gender gender, Date admissionDate, Date dischargedDate, Date deathDate);
-
     bool hasDischarged() const;
     bool hasPassedAway() const;
     int hospitalizationDuration(Date currentDate) const;
