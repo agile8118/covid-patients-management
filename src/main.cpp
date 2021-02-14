@@ -24,13 +24,8 @@ int number_of_deaths(const std::vector<Patient> *patients)
 {
     int i = 0;
     for (const Patient &patient : *patients)
-    {
         if (patient.hasPassedAway())
-        {
             ++i;
-        }
-    }
-
     return i;
 }
 
@@ -38,13 +33,8 @@ int number_of_discharged_patients(const std::vector<Patient> *patients)
 {
     int i = 0;
     for (const Patient &patient : *patients)
-    {
         if (patient.hasDischarged())
-        {
             ++i;
-        }
-    }
-
     return i;
 }
 
@@ -52,18 +42,19 @@ int number_of_hospitalized_patients(const std::vector<Patient> *patients)
 {
     int i = 0;
     for (const Patient &patient : *patients)
-    {
         if (!patient.hasPassedAway() && !patient.hasDischarged())
-        {
             ++i;
-        }
-    }
-
     return i;
 }
 
 void add_new_patience(std::vector<Patient> *patients)
 {
+    if (patients->size() == 100)
+    {
+        std::cout << "Maximum hospital capacity reached. Cannot add a new patient." << std::endl;
+        return;
+    }
+
     std::string ssn;
     std::string firstName;
     std::string lastName;
@@ -83,39 +74,39 @@ void add_new_patience(std::vector<Patient> *patients)
     std::string hasDischargedString;
     std::string hasPassedAwayString;
 
+    // SSN
     std::cout << "Enter social security number: ";
     std::cin >> ssn;
 
+    // First name
     std::cout << "Enter first name: ";
     std::cin >> firstName;
 
+    // Last name
     std::cout << "Enter last name: ";
     std::cin >> lastName;
 
+    // Age
     std::cout << "Enter age: ";
     std::cin >> age;
 
-    std::cout << "Does the patient have underlying health issues? (yes/no): ";
+    // Underlying health problems
+    std::cout << "Does the patient have underlying health problems? (yes/no): ";
     std::cin >> hasUnderlyingHealthProblemsString;
     hasUnderlyingHealthProblems = hasUnderlyingHealthProblemsString == "yes" ? true : false;
 
+    // Gender
     std::cout << "Enter Gender (F/M): ";
     std::cin >> genderString;
+    gender = (genderString == "F" || genderString == "f") ? Female : Male;
 
-    if (genderString == "F" || genderString == "f")
-    {
-        gender = Female;
-    }
-    else
-    {
-        gender = Male;
-    }
-
+    // Admission date
     std::cout << "Enter admission date (year, month, day, hour, minute): ";
     std::cin.ignore();
     getline(std::cin, admissionDateString);
     admissionDate.insert(admissionDateString);
 
+    // Discharged date
     std::cout << "Has the patient discharged? (yes/no): ";
     std::cin >> hasDischargedString;
     if (hasDischargedString == "yes" || hasDischargedString == "y")
@@ -126,6 +117,7 @@ void add_new_patience(std::vector<Patient> *patients)
         dischargedDate.insert(dischargedDateString);
     }
 
+    // Death date
     std::cout << "Has the patient passed away? (yes/no): ";
     std::cin >> hasPassedAwayString;
     if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
@@ -138,7 +130,7 @@ void add_new_patience(std::vector<Patient> *patients)
 
     Patient p(ssn, firstName, lastName, age, hasUnderlyingHealthProblems, gender, admissionDate, dischargedDate, deathDate);
 
-    (*patients).push_back(p);
+    patients->push_back(p);
 }
 
 void display_patient_records(Patient patient)
@@ -193,22 +185,26 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
 
             std::cout << "(For each field either specify a new info or hit enter to skip.)" << std::endl;
 
+            // First name
             std::cout << "New first name "
                       << "[" << patient.getFirstName() << "]: ";
             std::cin.ignore();
             getline(std::cin, firstName);
 
+            // Last name
             std::cout << "New last name "
                       << "[" << patient.getLastName() << "]: ";
             getline(std::cin, lastName);
 
+            // Age
             std::cout << "New age "
                       << "[" << std::to_string(patient.getAge()) << "]: ";
             getline(std::cin, ageString);
             std::stringstream ageStr(ageString);
             ageStr >> age;
 
-            std::cout << "Underlying health issues [" << (patient.getHasUnderlyingHealthProblems() ? "yes" : "no")
+            // Underlying health problems
+            std::cout << "Underlying health problems [" << (patient.getHasUnderlyingHealthProblems() ? "yes" : "no")
                       << "] (yes/no): ";
             getline(std::cin, hasUnderlyingHealthProblemsString);
             if (hasUnderlyingHealthProblemsString.length() > 0)
@@ -216,6 +212,7 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
             else
                 hasUnderlyingHealthProblems = patient.getHasUnderlyingHealthProblems();
 
+            // Gender
             std::cout << "New Gender "
                       << "[" << (patient.getGender() == Female ? "Female" : "Male")
                       << "] (M/F): ";
@@ -225,16 +222,17 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
             else
                 gender = patient.getGender();
 
+            // Admission date
             std::cout << "New admission date "
                       << "[" << patient.getAdmissionDate().getDate() << "] (year, month, day, hour, minute): ";
             getline(std::cin, admissionDateString);
             if (admissionDateString.length() > 0)
                 admissionDate.insert(admissionDateString);
 
+            // Discharged date
             std::cout << "Has the patient discharged [" << (patient.hasDischarged() ? ("Current discharged date is: " + patient.getDischargedDate().getDate()) : "no")
                       << "] (yes/no): ";
             getline(std::cin, hasDischargedString);
-
             if (hasDischargedString.length() > 0)
             {
                 if (hasDischargedString == "yes" || hasDischargedString == "y")
@@ -246,14 +244,12 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
                 }
             }
             else
-            {
                 dischargedDate = patient.getDischargedDate();
-            }
 
+            // Death date
             std::cout << "Has the patient passed away [" << (patient.hasPassedAway() ? ("Current death date is: " + patient.getDeathDate().getDate()) : "no")
                       << "] (yes/no): ";
             getline(std::cin, hasPassedAwayString);
-
             if (hasPassedAwayString.length() > 0)
             {
                 if (hasPassedAwayString == "yes" || hasPassedAwayString == "y")
@@ -264,9 +260,7 @@ void edit_patient_records(std::string ssn, std::vector<Patient> *patients)
                 }
             }
             else
-            {
                 deathDate = patient.getDeathDate();
-            }
 
             patient.update(firstName, lastName, age, hasUnderlyingHealthProblems, gender, admissionDate, dischargedDate, deathDate);
 
@@ -376,6 +370,8 @@ void display_men_to_women_patients_ratio(const std::vector<Patient> *patients)
     }
 
     float percentage = (float(menCount) / float(womenCount + menCount)) * 100;
+
+    // Determine how many characters to remove from the percentage value
     int toErase = percentage < 10 ? 1 : (percentage == 100 ? 3 : 2);
 
     std::cout << "--------------------------------" << std::endl;
