@@ -97,8 +97,15 @@ void Date::insert(std::string dateString)
     this->year = std::stoi(year);
     this->month = std::stoi(month);
     this->day = std::stoi(day);
-    this->hour = std::stoi(hour);
-    this->minute = std::stoi(min);
+
+    if (hour.length() > 0)
+        this->hour = std::stoi(hour);
+    else
+        this->hour = 0;
+    if (min.length() > 0)
+        this->minute = std::stoi(min);
+    else
+        this->minute = 0;
 }
 
 bool Date::hasValue() const
@@ -165,4 +172,47 @@ bool Date::operator<(const Date &other) const
         }
     }
     return false;
+}
+
+bool Date::operator>(const Date &other) const
+{
+    if (*this < other)
+        return false;
+    else
+        return true;
+}
+
+int Date::operator-(const Date &other) const
+{
+    Date greaterDate = (*this > other) ? *this : other;
+    Date smallerDate = (*this > other) ? other : *this;
+
+    int yearD;
+    int monthD;
+    int dayD;
+
+    yearD = greaterDate.year - smallerDate.year;
+    if (yearD > 0)
+    {
+        monthD = (12 - smallerDate.month) + greaterDate.month - 1;
+        dayD = (30 - smallerDate.day) + greaterDate.day;
+    }
+    else
+    {
+        monthD = greaterDate.month - smallerDate.month - 1;
+        if (monthD < 0)
+        {
+            monthD = 0;
+            dayD = greaterDate.day - smallerDate.day;
+        }
+        else
+        {
+            dayD = (30 - smallerDate.day) + greaterDate.day;
+        }
+    }
+
+    if (yearD > 0)
+        yearD = yearD - 1;
+
+    return (yearD * 365 + monthD * 30 + dayD);
 }

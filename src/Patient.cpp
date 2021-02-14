@@ -53,6 +53,22 @@ bool Patient::hasPassedAway() const
     return false;
 }
 
+int Patient::hospitalizationDuration(Date currentDate) const
+{
+    if (this->hasPassedAway())
+    {
+        return this->getDeathDate() - this->getAdmissionDate();
+    }
+    else if (this->hasDischarged())
+    {
+        return this->getDischargedDate() - this->getAdmissionDate();
+    }
+    else
+    {
+        return currentDate - this->getAdmissionDate();
+    }
+}
+
 // Getters
 std::string Patient::getSSN() const
 {

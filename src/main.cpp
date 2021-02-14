@@ -133,7 +133,7 @@ void add_new_patience(std::vector<Patient> *patients)
     patients->push_back(p);
 }
 
-void display_patient_records(Patient patient)
+void display_patient_records(Patient patient, std::string hospitalizationDuration = "")
 {
     std::cout << "--------------------------------" << std::endl;
     std::cout << "Information of patient with the SSN of " + patient.getSSN() << std::endl;
@@ -155,6 +155,12 @@ void display_patient_records(Patient patient)
     {
         std::cout << "Death Date: " + patient.getDeathDate().getDate() << std::endl;
     }
+
+    if (hospitalizationDuration.length() > 0)
+    {
+        std::cout << "Hospitalization Duration: " + hospitalizationDuration << " days" << std::endl;
+    }
+
     std::cout << "--------------------------------" << std::endl;
 }
 
@@ -332,6 +338,27 @@ void display_all_patients(std::vector<Patient> *patients)
     }
 }
 
+void display_all_patients_with_hospitalizaition_duration(std::vector<Patient> *patients)
+{
+    // Get the current time from the user
+    Date currentDate;
+    std::string currectDate;
+    std::cout << "Please enter the current date (year, month, day): " << std::endl;
+    std::cin.ignore();
+    getline(std::cin, currectDate);
+    currentDate.insert(currectDate);
+
+    // Sort the records first by the admission date
+    std::sort(patients->begin(), patients->end(), [&currentDate](const Patient &lhs, const Patient &rhs) {
+        return lhs.hospitalizationDuration(currentDate) < rhs.hospitalizationDuration(currentDate);
+    });
+
+    for (const Patient &patient : *patients)
+    {
+        display_patient_records(patient, std::to_string(patient.hospitalizationDuration(currentDate)));
+    }
+}
+
 void display_percentage_of_dead(int over_age, bool underlying_health_problems, const std::vector<Patient> *patients)
 {
     int count = 0;
@@ -412,9 +439,10 @@ int main()
         std::cout << " [6] Show all patients' records who have passed away " << std::endl;
         std::cout << " [7] Show all patients' records who have discharged " << std::endl;
         std::cout << " [8] Show all patients' records (sorted by admission date)" << std::endl;
-        std::cout << " [9] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
-        std::cout << "[10] Male to female deaths ratio" << std::endl;
-        std::cout << "[11] Exit" << std::endl;
+        std::cout << " [9] Show all patients' records (sorted by hospitalization duration)" << std::endl;
+        std::cout << "[10] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
+        std::cout << "[11] Male to female deaths ratio" << std::endl;
+        std::cout << "[12] Exit" << std::endl;
 
         std::cout << "Please choose an option: ";
         if (!(std::cin >> option))
@@ -472,12 +500,16 @@ int main()
             display_all_patients(&patients);
             break;
         case 9:
-            display_percentage_of_dead(70, true, &patients);
+            std::cout << "---Showing all patients' records (sorted by hospitalizaition duration) ---" << std::endl;
+            display_all_patients_with_hospitalizaition_duration(&patients);
             break;
         case 10:
-            display_men_to_women_patients_ratio(&patients);
+            display_percentage_of_dead(70, true, &patients);
             break;
         case 11:
+            display_men_to_women_patients_ratio(&patients);
+            break;
+        case 12:
             std::cout << "Exiting out of the application..." << std::endl;
             exit = true;
             break;

@@ -31,6 +31,7 @@ public:
 
     bool hasDischarged() const;
     bool hasPassedAway() const;
+    int hospitalizationDuration(Date currentDate) const;
 
     // Getters
     std::string getSSN() const;

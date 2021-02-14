@@ -24,6 +24,8 @@ public:
     bool hasValue() const;
 
     bool operator<(const Date &other) const;
+    bool operator>(const Date &other) const;
+    int operator-(const Date &other) const; // returns the difference between 2 times in days (expects all months to be 30 days)
 };
 
 #endif /* Date_h */
