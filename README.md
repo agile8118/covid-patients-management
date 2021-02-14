@@ -4,7 +4,7 @@ A very simple application for managing COVID patients written in c++.
 
 ## How to run the app
 
-After cloning the repository, run file cmake file from the root directory:
+After cloning the repository, run cmake from the root directory:
 
 > cmake .
 
