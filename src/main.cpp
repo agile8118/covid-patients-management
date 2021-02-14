@@ -122,13 +122,13 @@ void add_new_patience(std::vector<Patient> *patients)
         // Underlying health problems
         std::cout << "Does the patient have underlying health problems? (yes/no): ";
         std::cin >> hasUnderlyingHealthProblemsString;
-        p.setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
         if (hasUnderlyingHealthProblemsString == "yes" || hasUnderlyingHealthProblemsString == "y")
             hasUnderlyingHealthProblems = true;
         else if (hasUnderlyingHealthProblemsString == "no" || hasUnderlyingHealthProblemsString == "n")
             hasUnderlyingHealthProblems = false;
         else
             throw std::invalid_argument("Invalid argument. Make sure to specify correctly whether the patient has underlying health problems or not (yes/no). Received '" + hasUnderlyingHealthProblemsString + "'");
+        p.setHasUnderlyingHealthProblems(hasUnderlyingHealthProblems);
 
         // Gender
         std::cout << "Enter Gender (F/M): ";
