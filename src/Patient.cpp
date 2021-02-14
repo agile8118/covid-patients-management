@@ -42,6 +42,7 @@ bool Patient::hasPassedAway() const
     return false;
 }
 
+// Returns how many days a patient was in the hospital in days
 int Patient::hospitalizationDuration(Date currentDate) const
 {
     if (this->hasPassedAway())
@@ -58,6 +59,9 @@ int Patient::hospitalizationDuration(Date currentDate) const
     }
 }
 
+/********************************/
+/** Validators */
+/********************************/
 bool Patient::checkAge(int age) const
 {
     if (age > 0 && age < 200)
@@ -70,7 +74,9 @@ bool Patient::checkAge(int age) const
     }
 }
 
-// Getters
+/********************************/
+/** Getters */
+/********************************/
 std::string Patient::getSSN() const
 {
     return this->ssn;
@@ -116,7 +122,9 @@ Date Patient::getDeathDate() const
     return this->deathDate;
 }
 
-// Setters
+/********************************/
+/** Setters */
+/********************************/
 void Patient::setSSN(std::string ssn)
 {
     this->ssn = ssn;

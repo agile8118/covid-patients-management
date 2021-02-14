@@ -32,7 +32,7 @@ public:
 
     bool hasDischarged() const;
     bool hasPassedAway() const;
-    int hospitalizationDuration(Date currentDate) const;
+    int hospitalizationDuration(Date currentDate) const; // Returns how many days a patient was in the hospital in days
 
     // Getters
     std::string getSSN() const;

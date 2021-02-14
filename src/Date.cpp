@@ -133,7 +133,9 @@ bool Date::hasValue() const
     return true;
 }
 
-// Validators
+/********************************/
+/** Validators */
+/********************************/
 bool Date::checkYear(int y) const
 {
     if (y > 1970 && y < 2050)
@@ -233,6 +235,9 @@ bool Date::operator<(const Date &other) const
     return false;
 }
 
+/********************************/
+/** Operator overloaders */
+/********************************/
 bool Date::operator>(const Date &other) const
 {
     if (*this < other)
@@ -254,11 +259,13 @@ int Date::operator-(const Date &other) const
     yearD = greaterDate.year - smallerDate.year;
     if (yearD > 0)
     {
+        // If the 2 dates does not have the same year...
         monthD = (12 - smallerDate.month) + greaterDate.month - 1;
         dayD = (30 - smallerDate.day) + greaterDate.day;
     }
     else
     {
+        // If the 2 dates have the same year...
         monthD = greaterDate.month - smallerDate.month - 1;
         if (monthD < 0)
         {
