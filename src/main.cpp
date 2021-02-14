@@ -32,9 +32,19 @@ int number_of_deaths(const std::vector<Patient> *patients)
     return i;
 }
 
-// int number_of_discharged_patients(const std::vector<Patient> *patients)
-// {
-// }
+int number_of_discharged_patients(const std::vector<Patient> *patients)
+{
+    int i = 0;
+    for (const Patient &patient : *patients)
+    {
+        if (patient.hasDischarged())
+        {
+            ++i;
+        }
+    }
+
+    return i;
+}
 
 int number_of_hospitalized_patients(const std::vector<Patient> *patients)
 {
@@ -132,7 +142,7 @@ void add_new_patience(std::vector<Patient> *patients)
 void display_patient_records(Patient patient)
 {
     std::cout << "--------------------------------" << std::endl;
-    std::cout << "Information of patient with the SSN number of " + patient.getSSN() << std::endl;
+    std::cout << "Information of patient with the SSN of " + patient.getSSN() << std::endl;
     std::cout << "First Name: " + patient.getFirstName() << std::endl;
     std::cout << "Last Name: " + patient.getLastName() << std::endl;
     std::cout << "Age: " + std::to_string(patient.getAge()) << std::endl;
@@ -284,11 +294,17 @@ void display_deceased_patients_records(const std::vector<Patient> *patients)
     }
 }
 
-//
-//void display_discharged_patients_records() {
-//
-//}
-//
+void display_discharged_patients_records(const std::vector<Patient> *patients)
+{
+    std::cout << "As of now " + std::to_string(number_of_discharged_patients(patients)) + " patient(s) have discharged." << std::endl;
+    for (const Patient &patient : *patients)
+    {
+        if (patient.hasDischarged())
+        {
+            display_patient_records(patient);
+        }
+    }
+}
 
 //
 //void display_patients_by_hospitalization_date() {
@@ -408,6 +424,10 @@ int main()
         case 6:
             std::cout << "---Showing all patients' records who have died---" << std::endl;
             display_deceased_patients_records(&patients);
+            break;
+        case 7:
+            std::cout << "---Showing all patients' records who have discharged---" << std::endl;
+            display_discharged_patients_records(&patients);
             break;
         case 11:
             std::cout << "---Showing all patient's records---" << std::endl;
