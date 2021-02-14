@@ -429,7 +429,7 @@ void display_all_patients_with_hospitalizaition_duration(std::vector<Patient> *p
     // Get the current time from the user
     Date currentDate;
     std::string currectDate;
-    std::cout << "Please enter the current date (year, month, day): " << std::endl;
+    std::cout << "Please enter the current date (year, month, day): ";
     std::cin.ignore();
     getline(std::cin, currectDate);
     try
@@ -511,13 +511,13 @@ int main()
     std::vector<Patient> patients;
 
     // Inserting some seed data
-    patients.push_back(Patient("1", "Patrick", "Davis", 71, true, Male, Date(2020, 12, 21, 4, 45), Date(2020, 2, 24, 4, 45), Date()));
-    patients.push_back(Patient("87623654", "Anthony", "Johnson", 89, true, Male, Date(2020, 12, 18, 4, 45), Date(2020, 12, 21, 4, 45), Date()));
+    patients.push_back(Patient("1", "Patrick", "Davis", 71, false, Male, Date(2020, 12, 21, 4, 45), Date(2021, 2, 24, 4, 45), Date()));
+    patients.push_back(Patient("87623654", "Anthony", "Johnson", 30, true, Male, Date(2020, 12, 18, 4, 45), Date(2020, 12, 21, 4, 45), Date()));
     patients.push_back(Patient("24587905", "Meredith", "Brown", 28, false, Female, Date(2020, 12, 12, 4, 45), Date(2020, 12, 21, 4, 45), Date()));
-    patients.push_back(Patient("67535763", "Jay", "Dunphie", 56, true, Male, Date(2020, 12, 1, 4, 45), Date(), Date()));
-    patients.push_back(Patient("13498376", "Alex", "Smith", 25, true, Female, Date(2020, 12, 18, 5, 45), Date(), Date()));
-    patients.push_back(Patient("13465209", "Luke", "Heimert", 72, true, Male, Date(2020, 12, 17, 1, 50), Date(), Date(2019, 4, 19, 12, 1)));
-    patients.push_back(Patient("42719475", "Emma", "Miller", 23, false, Female, Date(2020, 1, 9, 1, 50), Date(2019, 6, 11, 7, 40), Date()));
+    patients.push_back(Patient("67535763", "Jay", "Dunphie", 56, false, Male, Date(2020, 12, 1, 4, 45), Date(), Date()));
+    patients.push_back(Patient("13498376", "Alex", "Smith", 73, false, Female, Date(2020, 12, 18, 5, 45), Date(), Date()));
+    patients.push_back(Patient("13465209", "Luke", "Heimert", 72, true, Male, Date(2020, 12, 17, 1, 50), Date(), Date(2021, 2, 19, 12, 1)));
+    patients.push_back(Patient("42719475", "Emma", "Miller", 23, false, Female, Date(2020, 1, 9, 1, 50), Date(2020, 3, 11, 7, 40), Date()));
 
     bool exit = false;
     while (!exit)
