@@ -107,17 +107,20 @@ void Patient::setSSN(std::string ssn)
 
 void Patient::setFirstName(std::string firstName)
 {
-    this->firstName = firstName;
+    if (firstName.length() > 0)
+        this->firstName = firstName;
 }
 
 void Patient::setLastName(std::string lastName)
 {
-    this->lastName = lastName;
+    if (lastName.length() > 0)
+        this->lastName = lastName;
 }
 
 void Patient::setAge(int age)
 {
-    this->age = age;
+    if (age > 0 && age < 200)
+        this->age = age;
 }
 
 void Patient::setHasUnderlyingHealthProblems(bool hasUnderlyingHealthProblems)
@@ -132,7 +135,8 @@ void Patient::setGender(Gender gender)
 
 void Patient::setAdmissionDate(Date admissionDate)
 {
-    this->admissionDate = admissionDate;
+    if (admissionDate.hasValue())
+        this->admissionDate = admissionDate;
 }
 
 void Patient::setDischargedDate(Date dischargedDate)
