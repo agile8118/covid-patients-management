@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include "Date.h"
 #include "Patient.h"
 
@@ -306,19 +307,30 @@ void display_discharged_patients_records(const std::vector<Patient> *patients)
     }
 }
 
-//
 //void display_patients_by_hospitalization_date() {
 //
 //}
-//
-//void percentage_of_dead(int age, bool underlying_health_problems) {
-//
-//}
-//
+
+void display_percentage_of_dead(int over_age, bool underlying_health_problems, const std::vector<Patient> *patients)
+{
+    int count = 0;
+    for (const Patient &patient : *patients)
+    {
+
+        if (patient.getHasUnderlyingHealthProblems() == underlying_health_problems && patient.getAge() > over_age && patient.hasPassedAway())
+            ++count;
+    }
+    float percentage = (float(count) / float(number_of_deaths(patients))) * 100;
+
+    // Determine how many characters to remove from the percentage value
+    int toErase = percentage < 10 ? 1 : (percentage == 100 ? 3 : 2);
+
+    std::cout << std::to_string(percentage).erase(toErase) << "% of dead patients were over 70 and had underlying health problems." << std::endl;
+}
+
 //void men_to_women_patients_ratio() {
 //
 //}
-//
 
 int main()
 {
@@ -331,13 +343,13 @@ int main()
     Date admissionDate(2019, 12, 21, 4, 45);
     Date dischargedDate;
     Date deathDate(2020, 2, 24, 4, 45);
-    Patient p("1234", "Patrick", "Jobs", 20, false, Male, admissionDate, dischargedDate, deathDate);
+    Patient p("1234", "Patrick", "Jobs", 100, true, Male, admissionDate, dischargedDate, deathDate);
     patients.push_back(p);
 
     Date admissionDate1(2020, 11, 18, 4, 45);
     Date dischargedDate1(2020, 12, 21, 4, 45);
     Date deathDate1;
-    Patient p1("652341", "Anthony", "Fiski", 32, true, Male, admissionDate1, dischargedDate1, deathDate1);
+    Patient p1("652341", "Anthony", "Fiski", 89, true, Male, admissionDate1, dischargedDate1, deathDate1);
     patients.push_back(p1);
 
     Date admissionDate2(2020, 11, 18, 4, 45);
@@ -358,6 +370,12 @@ int main()
     Patient p4("012314", "Alex", "Pritchet", 25, true, Female, admissionDate4, dischargedDate4, deathDate4);
     patients.push_back(p4);
 
+    Date admissionDate5(2019, 4, 12, 1, 50);
+    Date dischargedDate5;
+    Date deathDate5(2019, 4, 19, 12, 1);
+    Patient p5("3481946", "Luke", "Heimert", 72, true, Male, admissionDate5, dischargedDate5, deathDate5);
+    patients.push_back(p5);
+
     bool exit = false;
     while (!exit)
     {
@@ -372,9 +390,11 @@ int main()
         std::cout << " [5] Show all patients' records currently in hospitalization " << std::endl;
         std::cout << " [6] Show all patients' records who have passed away " << std::endl;
         std::cout << " [7] Show all patients' records who have discharged " << std::endl;
+
         std::cout << " [8] Show all patients' records ordered by hospitalization duration" << std::endl;
         std::cout << " [9] Percentage of dead patients who had underlying health problems and were over 70" << std::endl;
         std::cout << "[10] Male to female deaths ratio" << std::endl;
+
         std::cout << "[11] Show all patient's records" << std::endl;
         std::cout << "[12] Exit" << std::endl;
 
@@ -428,6 +448,9 @@ int main()
         case 7:
             std::cout << "---Showing all patients' records who have discharged---" << std::endl;
             display_discharged_patients_records(&patients);
+            break;
+        case 9:
+            display_percentage_of_dead(70, true, &patients);
             break;
         case 11:
             std::cout << "---Showing all patient's records---" << std::endl;
