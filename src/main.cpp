@@ -47,7 +47,7 @@ int number_of_hospitalized_patients(const std::vector<Patient> *patients)
     return i;
 }
 
-Patient *find_patient(std::string ssn, std::vector<Patient> *patients)
+Patient *find_patient(const std::string &ssn, std::vector<Patient> *patients)
 {
     for (Patient &patient : *patients)
     {
@@ -358,7 +358,7 @@ void edit_patient_records(Patient *patient)
     }
 }
 
-void delete_patient_records(std::string ssn, std::vector<Patient> *patients)
+void delete_patient_records(const std::string &ssn, std::vector<Patient> *patients)
 {
     if (find_patient(ssn, patients) == nullptr)
         return;
